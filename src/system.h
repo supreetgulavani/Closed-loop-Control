@@ -24,6 +24,7 @@
 #include "microblaze_sleep.h"
 #include "xtmrctr.h"
 #include "xintc.h"
+#include "xwdttb.h"
 
 #include "nexys4io.h"
 #include "xgpio.h"
@@ -46,7 +47,15 @@
 #define PMODENC_HIGHADDR        XPAR_PMODENC_0_AXI_GPIO_HIGHADDR
 
 // Definition for PWM Detect Address
-#define PWM_DETECT_ADDR         XPAR_AXI_GPIO_1_BASEADDR
+//#define PWM_DETECT_ADDR         XPAR_AXI_GPIO_1_BASEADDR
+
+// Definition for peripheral PMODHB3
+#define PMODHB3_DEVICE_ID		XPAR_PMODHB3IP_0_DEVICE_ID
+#define PMODHB3_BASEADDR		XPAR_PMODHB3IP_0_S00_AXI_BASEADDR
+#define PMODHB3_HIGHADDR		XPAR_PMODHB3IP_0_S00_AXI_HIGHADDR
+
+// PWM Tachometer Address
+#define PWM_TACHO_ADDR			XPAR_PWM_TACHO_0_S00_AXI_BASEADDR
 
 // Fixed Interval timer - 100 MHz input clock, 40KHz output clock
 // FIT_COUNT_1MSEC = FIT_CLOCK_FREQ_HZ * .001
@@ -60,15 +69,25 @@
 #define SPEEDUP1   1
 #define SPEEDUP5  5
 #define SPEEDUP10((x),(pos)) ({1 & ((x)  >> (pos))})   
+#define SET_MODE    0
+#define RUN_MODE    1
+#define CRASH_MODE  2
 
 // Peripheral Instances
 extern PmodENC pmodENC_inst;
 extern XIntc   IntCtlrInst;             // Interrupt Controller instance
-//extern XTmrCtr  AXIWDTimerInst;         // Timer Instance
+extern XTmrCtr  AXITimerInst;         // Timer Instance
+extern XWdtTb   WDTTimerInst;           // Watchdog timer instance
+extern static XUartLite uart;       // UARTlite instance
+
+extern volatile uint8_t kpid[3] = {0};
+extern volatile uint16_t stptRPM;
+// Force Crash flag
+extern volatile uint8_t force_crash;
 
 /**************Funtion Prototypes*****************/
-void do_init(void);      // Initialize system
-int AXI_Timer_initialize(void);
-//add more fn
+extern void do_init(void);      // Initialize system
+extern int AXI_Timer_initialize(void);
+extern void WDT_Handler(void);
 
 #endif
