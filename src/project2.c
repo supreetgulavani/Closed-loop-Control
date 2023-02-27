@@ -19,8 +19,7 @@
 #include "xparameters.h"
 #include "xstatus.h"
 
-#include "PmodOLEDrgb.h"
-#include "PmodENC.h"
+#include "PmodENC544.h"
 
 #include "nexys4io.h"
 
@@ -61,11 +60,7 @@ int main()
 	microblaze_enable_interrupts();
     while(1){
         if(newbtnsSw){
-            uint8_t btnMask = 0x01;
-			for (int i = 0; i < NBTNS; i++){
-				if (btns & (btnMask << i))
-					push_btn_task(i);
-			}
+            
             newbtnsSw = false;
         }
     }
@@ -87,6 +82,7 @@ void input_task(uint8_t btnState)
     }
 
 }
+
 void set_task()
 {
     uint8_t btn = sel_k_params;
@@ -188,7 +184,7 @@ void run_task()
 void crash_task()
 {
     if(PMODENC544_isBtnPressed())
-        force_crash = 1;
+        force_crash = 1;        // flag 
     else  
         force_crash = 0;
 }
