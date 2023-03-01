@@ -65,12 +65,12 @@ void FIT_Handler(void)
 	}
 }
 
-/* In WDT interrupt handler */
+/* In WDT interrupt handler
 void wdt_handler(void *pvUnused)
 {
 	//if system running flag is set, restart the watch dog timer
 	if(sys_flag == 1)
 	{
-		XWdtTb_RestartWdt(&WDTInst);
+		XWdtTb_RestartWdt(&WDTTimerInst);
 	}
-}
+}*/

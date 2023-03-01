@@ -1,12 +1,12 @@
 /****************************************************************************************
 *   @file system.h
-*   
+*
 *   @author Omkar Jadhav (omjadha@pdx.edu)  Supreet Gulavani (sg7@pdx.edu)
 *   @copyright Omkar Jadhav, Supreet Gulavani, 2023
 *
 *   Modified from the original file by Prof. Roy Kravitz at Portland State University.
-*   
-*   @note This file has all function prototypes   
+*
+*   @note This file has all function prototypes
 *
 *******************************************************************************************/
 #ifndef __SYSTEM_H__
@@ -16,18 +16,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <platform.h>
+#include "platform.h"
 
 #include "xil_printf.h"
 #include "xparameters.h"
 #include "xstatus.h"
 #include "microblaze_sleep.h"
-#include "xtmrctr.h"
-#include "xintc.h"
-#include "xwdttb.h"
 
+#include "xintc.h"
+
+#include "xuartlite.h"
 #include "nexys4io.h"
-#include "xgpio.h"
+#include "PmodENC544.h"
+#include "PMODHB3_IP.h"
 
 
 
@@ -64,30 +65,31 @@
 #define FIT_COUNT				(FIT_IN_CLOCK_FREQ_HZ / FIT_CLOCK_FREQ_HZ)
 #define FIT_COUNT_1MSEC			40
 
-// Application Specific 
+// Application Specific
 #define NBTNS   5
-#define SPEEDUP1   1
-#define SPEEDUP5  5
-#define SPEEDUP10((x),(pos)) ({1 & ((x)  >> (pos))})   
+#define FACTOR_1	1
+#define FACTOR_5	5
+#define FACTOR_10	10
+#define GET_BIT(x,pos) (1 & ((x)  >> (pos)))
 #define SET_MODE    0
 #define RUN_MODE    1
 #define CRASH_MODE  2
 
 // Peripheral Instances
-extern PmodENC pmodENC_inst;
-extern XIntc   IntCtlrInst;             // Interrupt Controller instance
-extern XTmrCtr  AXITimerInst;         // Timer Instance
-extern XWdtTb   WDTTimerInst;           // Watchdog timer instance
-extern static XUartLite uart;       // UARTlite instance
 
-extern volatile uint8_t kpid[3] = {0};
+extern XIntc   IntCtlrInst;             // Interrupt Controller instance
+
+//extern XWdtTb   WDTTimerInst;           // Watchdog timer instance
+static XUartLite uart;       // UARTlite instance
+
+ extern volatile u16 kpid[3];
 extern volatile uint16_t stptRPM;
 // Force Crash flag
 extern volatile uint8_t force_crash;
 
 /**************Funtion Prototypes*****************/
-extern void do_init(void);      // Initialize system
-extern int AXI_Timer_initialize(void);
-extern void WDT_Handler(void);
+XStatus do_init(void);      // Initialize system
+
+ void WDT_Handler(void);
 
 #endif
