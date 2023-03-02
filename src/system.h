@@ -82,8 +82,8 @@ extern XIntc   IntCtlrInst;             // Interrupt Controller instance
 //extern XWdtTb   WDTTimerInst;           // Watchdog timer instance
 static XUartLite uart;       // UARTlite instance
 
- extern volatile u16 kpid[3];
-extern volatile uint16_t stptRPM;
+ extern u16 kpid[3];
+extern volatile u16 stptRPM;
 // Force Crash flag
 extern volatile uint8_t force_crash;
 
